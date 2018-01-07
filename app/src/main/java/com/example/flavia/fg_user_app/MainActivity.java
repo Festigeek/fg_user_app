@@ -1,10 +1,14 @@
 package com.example.flavia.fg_user_app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,8 +21,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-private String token = null;
+        implements NavigationView.OnNavigationItemSelectedListener, AccountFragment.OnFragmentInteractionListener {
+
+    private final String FRAG_TAG = "swap fragment";
+    private String token = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +46,9 @@ private String token = null;
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //fragment launch
+        changeFragment(AccountFragment.class, false, true);
     }
 
     @Override
@@ -105,5 +115,60 @@ private String token = null;
         super.onRestart();
         //TODO check if the token is valid and redirect to login if not
         //eg: simple reuquest on /user/userid and see which response we get
+    }
+    /**
+     * Change the current displayed fragment by a new one.
+     * - if the fragment is in backstack, it will pop it
+     * - if the fragment is already displayed (trying to change the fragment with the same), it will not do anything
+     *
+     * @param fragmentClass   the class of the new fragment to display
+     * @param saveInBackstack if we want the fragment to be in backstack
+     * @param animate         if we want a nice animation or not
+     */
+    protected void changeFragment(Class fragmentClass, boolean saveInBackstack, boolean animate) {
+        Fragment frag = null;
+
+        try {
+            frag = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String backStateName = ((Object) frag).getClass().getName();
+
+        try {
+            FragmentManager manager = getSupportFragmentManager();
+            boolean fragmentPopped = manager.popBackStackImmediate(backStateName, 0);
+
+            if (!fragmentPopped && manager.findFragmentByTag(backStateName) == null) {
+                //fragment not in back stack, create it.
+                FragmentTransaction transaction = manager.beginTransaction();
+
+                if (animate) {
+                    Log.d(FRAG_TAG, "Change Fragment: animate");
+                    transaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                }
+
+                transaction.replace(R.id.content, frag, backStateName);
+
+                if (saveInBackstack) {
+                    Log.d(FRAG_TAG, "Change Fragment: addToBackTack " + backStateName);
+                    transaction.addToBackStack(backStateName);
+                } else {
+                    Log.d(FRAG_TAG, "Change Fragment: NO addToBackStack");
+                }
+
+                transaction.commit();
+            } else {
+                // custom effect if fragment is already instanciated
+            }
+        } catch (IllegalStateException exception) {
+            Log.w(FRAG_TAG, "Unable to commit fragment, could be activity as been killed in background. " + exception.toString());
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
