@@ -38,11 +38,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -129,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         getLoaderManager().initLoader(0, null, this);
     }
-
+// TODO remove this, not needed
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -228,8 +233,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             //TODO go to mainactivity
                             //create intent and send tokento the main activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            String tokenResponse = response.toString();
-                            intent.putExtra("token", tokenResponse);
+
+
+                            //test if auth ok
+
+                            try {
+                                if (!response.getString("success").equals("Authenticated.")) {
+                                    Log.i("auth failed", response.toString());
+                                }
+                            } catch (Exception e){
+                                Log.i("auth failed", response.toString());
+                            }
+
+                            //get the token and put in intent
+                            String token = null;
+                            try{
+                                  token = response.getString("token");
+                                  Log.i("TOKEN GETSTRING", token);
+                            } catch (Exception e){
+                                Log.i("exception", e.toString());
+                            }
+
+                            intent.putExtra("token", token);
                             startActivity(intent);
                         }
                     },

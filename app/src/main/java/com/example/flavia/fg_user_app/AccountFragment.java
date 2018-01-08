@@ -1,13 +1,36 @@
 package com.example.flavia.fg_user_app;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,12 +45,27 @@ public class AccountFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private final String url = "https://api.festigeek.ch/v1";
+    private String token = null;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
+    private Unbinder unbinder;
     private OnFragmentInteractionListener mListener;
+    @BindView(R.id.fullname)
+    protected AppCompatTextView fullname_field;
+    @BindView(R.id.mail)
+    protected AppCompatTextView mail_field;
+    @BindView(R.id.qrcode)
+    protected AppCompatImageView qrcode_field;
+    @BindView(R.id.username)
+    protected AppCompatTextView username_field;
+    @BindView(R.id.birthdate)
+    protected AppCompatTextView birthdate_field;
+    //data
+    RequestQueue queue = null;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -54,26 +92,91 @@ public class AccountFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
+
+
+
+        token = ((MainActivity) getActivity()).getToken();
+
+    }
+
+    public void attemptGetUserInfo() {
+
+        Map<String, String> jsonParams = new HashMap<>();
+        //insert the params
+
+        //creating the request and the promise
+        // gives verb, url,
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url + "/users/me", new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("/me RESPONSE", response.toString());
+                        populateFields(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {  // needs headers for the request, override header function of this object (not the general class)
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+        //execution !! (finally)
+        queue.add(jsObjRequest);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
+        queue = Volley.newRequestQueue(getContext());
+        attemptGetUserInfo();
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
+/*
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
+*/
+    private void populateFields(JSONObject data){
+        try{
+            fullname_field.setText(data.getString("firstname") + " "+ data.getString("lastname"));
+            mail_field.setText(data.getString("email"));
+            username_field.setText(data.getString("username"));
+            birthdate_field.setText(data.getString("birthdate"));
+            String encodedImage = data.getString("QRCode");
+            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            qrcode_field.setImageBitmap(decodedByte);
 
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -89,6 +192,11 @@ public class AccountFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     /**

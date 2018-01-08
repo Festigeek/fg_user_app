@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, AccountFragment.OnFragmentInteractionListener {
 
     private final String FRAG_TAG = "swap fragment";
+
+
+
     private String token = null;
 
     @Override
@@ -165,6 +168,9 @@ public class MainActivity extends AppCompatActivity
         } catch (IllegalStateException exception) {
             Log.w(FRAG_TAG, "Unable to commit fragment, could be activity as been killed in background. " + exception.toString());
         }
+    }
+    public String getToken() {
+        return token;
     }
 
     @Override
