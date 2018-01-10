@@ -1,7 +1,9 @@
 package com.example.flavia.fg_user_app.notification;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.flavia.fg_user_app.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -17,5 +19,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated.
         Log.e(TAG, "From: " + remoteMessage.getFrom());
         Log.e(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+
+        // Toast.makeText(this, "From: " + remoteMessage.getFrom() + " - " + remoteMessage.getNotification().getBody(), Toast.LENGTH_LONG ).show();
     }
 }
