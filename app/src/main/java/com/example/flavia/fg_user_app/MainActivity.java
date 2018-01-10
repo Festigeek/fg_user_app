@@ -21,7 +21,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, AccountFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener {
+        implements  NavigationView.OnNavigationItemSelectedListener,
+                    AccountFragment.OnFragmentInteractionListener,
+                    NotificationFragment.OnFragmentInteractionListener {
 
     private final String FRAG_TAG = "swap fragment";
 

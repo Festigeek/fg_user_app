@@ -28,4 +28,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Notifications</string>
+
+    <string name="default_notification_channel_id">default</string>
 </resources>

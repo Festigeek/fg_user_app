@@ -47,6 +47,11 @@
         </service>
 
 
+        <!-- https://stackoverflow.com/questions/45462666/notificationcompat-builder-deprecated-in-android-o/47438383#47438383-->
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+
     </application>
 
 </manifest>
