@@ -1,14 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:paddingTop="20dp"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
     tools:context="com.example.flavia.fg_user_app.NotificationFragment">
-
-
 
     <Switch
 
@@ -20,61 +18,59 @@
         android:text="Tournois" />
     <Switch
 
-        android:layout_marginStart="10dp"
         android:id="@+id/hearthstone_switch"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:text="Hearthstone"
-        android:checked="true"
-        android:gravity="start"/>
-    <Switch
         android:layout_marginStart="10dp"
+        android:checked="true"
+        android:gravity="start"
+        android:text="Hearthstone" />
+    <Switch
         android:id="@+id/lol_switch"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:text="League of Legends"
-        android:checked="true"
-        android:gravity="start"/>
-    <Switch
         android:layout_marginStart="10dp"
+        android:checked="true"
+        android:gravity="start"
+        android:text="League of Legends" />
+    <Switch
         android:id="@+id/csgo_switch"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:text="CS:GO"
-        android:checked="true"
-        android:gravity="start"/>
-    <Switch
         android:layout_marginStart="10dp"
+        android:checked="true"
+        android:gravity="start"
+        android:text="CS:GO" />
+    <Switch
         android:id="@+id/ow_switch"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
-        android:text="Overwatch"
+        android:layout_marginStart="10dp"
         android:checked="true"
-        android:gravity="start"/>
+        android:gravity="start"
+        android:text="Overwatch" />
     <Switch
         android:id="@+id/animation"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
-        android:text="Animations"
         android:checked="true"
-        android:gravity="start"/>
+        android:gravity="start"
+        android:text="Animations" />
 
     <Switch
         android:id="@+id/food"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
-        android:text="Repas"
         android:checked="true"
-        android:gravity="start"/>
+        android:gravity="start"
+        android:text="Repas" />
 
     <Switch
         android:id="@+id/ceremony"
         android:layout_width="fill_parent"
         android:layout_height="55dp"
-        android:text="Remise des Prix"
         android:checked="true"
-        android:gravity="start"/>
-
-
+        android:gravity="start"
+        android:text="Remise des Prix" />
 
 </LinearLayout>
