@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "193830666705",
+    "firebase_url": "https://fg-notif.firebaseio.com",
+    "project_id": "fg-notif",
+    "storage_bucket": "fg-notif.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193830666705:android:fd009eb8a5b21bf5",
+        "android_client_info": {
+          "package_name": "com.example.flavia.fg_user_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193830666705-lvt1b3ngeb803d9svmo1l8evt8o6g045.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBf8rjV6a8nupc7vC5q1UgE2VffuXRqRY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
