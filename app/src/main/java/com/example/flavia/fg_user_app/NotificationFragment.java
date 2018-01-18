@@ -1,18 +1,24 @@
 package com.example.flavia.fg_user_app;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NotificationFragment.OnFragmentInteractionListener} interface
+ * {@link NotificationFragment.OnNotificationsPreferencesSet} interface
  * to handle interaction events.
  * Use the {@link NotificationFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -28,7 +34,33 @@ public class NotificationFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private Unbinder unbinder;
+
+    private OnNotificationsPreferencesSet mListener;
+
+    @BindView(R.id.all_tournaments)
+    protected Switch allTournamentSwitch;
+
+    @BindView(R.id.hearthstone_switch)
+    protected Switch hsSwitch;
+
+    @BindView(R.id.lol_switch)
+    protected Switch lolSwitch;
+
+    @BindView(R.id.csgo_switch)
+    protected Switch csgoSwitch;
+
+    @BindView(R.id.ow_switch)
+    protected Switch owSwitch;
+
+    @BindView(R.id.animation)
+    protected Switch animSwitch;
+
+    @BindView(R.id.food)
+    protected Switch foodSwitch;
+
+    @BindView(R.id.ceremony)
+    protected Switch ceremonySwitch;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -64,22 +96,125 @@ public class NotificationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
+
+        // Set all listener
+
+
+        allTournamentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // HS
+                // LOL
+                // CSGO
+                // OW
+                if (isChecked) {
+
+                    preferences.add("HS");
+                    hsSwitch.setChecked(true);
+
+                    preferences.add("LOL");
+                    lolSwitch.setChecked(true);
+
+                    preferences.add("CSGO");
+                    csgoSwitch.setChecked(true);
+
+                    preferences.add("OW");
+                    owSwitch.setChecked(true);
+
+                } else {
+
+                    preferences.remove("HS");
+                    hsSwitch.setChecked(false);
+
+                    preferences.remove("LOL");
+                    lolSwitch.setChecked(false);
+
+                    preferences.remove("CSGO");
+                    csgoSwitch.setChecked(false);
+
+                    preferences.remove("OW");
+                    owSwitch.setChecked(false);
+                }
+            }
+        });
+
+
+        hsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // HS
+                if (isChecked) {
+
+                    preferences.add("HS");
+                    allTournamentSwitch.setChecked(true);
+
+                } else {
+
+                    preferences.remove("HS");
+
+                    if (! preferences.haveAtLeastOneGame()){
+                        allTournamentSwitch.setChecked(false);
+                    }
+
+
+                }
+            }
+        });
+
+        lolSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // LOL
+                if (isChecked) {
+
+                    preferences.add("LOL");
+                    allTournamentSwitch.setChecked(true);
+
+                } else {
+
+                    preferences.remove("LOL");
+
+                    if (! preferences.haveAtLeastOneGame()){
+                        allTournamentSwitch.setChecked(false);
+                    }
+
+
+                }
+            }
+        });
+
+
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(List<String> listNotifications) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.upadateNotificationRequest(listNotifications);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnNotificationsPreferencesSet) {
+            mListener = (OnNotificationsPreferencesSet) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -92,18 +227,21 @@ public class NotificationFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
+    @Override public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    // Notification List should contain only :
+    // HS
+    // LOL
+    // CSGO
+    // OW
+    // Anim
+    // Food
+    // Ceremony
+    public interface OnNotificationsPreferencesSet {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void upadateNotificationRequest(List<String> listNotifications);
     }
 }

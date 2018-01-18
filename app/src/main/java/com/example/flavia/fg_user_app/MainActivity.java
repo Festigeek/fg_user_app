@@ -20,10 +20,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener,
                     AccountFragment.OnFragmentInteractionListener,
-                    NotificationFragment.OnFragmentInteractionListener {
+                    NotificationFragment.OnNotificationsPreferencesSet{
 
     private final String FRAG_TAG = "swap fragment";
 
@@ -54,6 +57,9 @@ public class MainActivity extends AppCompatActivity
 
         //fragment launch
         changeFragment(AccountFragment.class, false, true);
+
+        // Just load default pref one
+        NotificationPreference.getInstance();
     }
 
     @Override
@@ -166,6 +172,17 @@ public class MainActivity extends AppCompatActivity
     }
     public String getToken() {
         return token;
+    }
+
+    // NotificationFragment
+    @Override
+    public void upadateNotificationRequest(final List<String> listNotifications) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                NotificationPreference.getInstance().setSubscribeNotifications(listNotifications);
+            }
+        });
     }
 
     @Override

@@ -7,19 +7,31 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.flavia.fg_user_app.MainActivity;
+import com.example.flavia.fg_user_app.NotificationFragment;
+import com.example.flavia.fg_user_app.NotificationPreference;
 import com.example.flavia.fg_user_app.R;
+
+
+
+
+
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    private static final String TAG = "FIREBASE Service";
-
+    private static final String TAG = "Notification Service";
 
     public MyFirebaseMessagingService() {
         super();
@@ -27,22 +39,31 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO: Handle FCM messages here.
-        // If the application is in the foreground handle both data and notification messages here.
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated.
+
+
         Log.e(TAG, "From: " + remoteMessage.getFrom());
         Log.e(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
-
 
         // Take back information for the notification.
         String title = remoteMessage.getNotification().getTitle();
         String message = remoteMessage.getNotification().getBody();
+        Map<String, String> data = remoteMessage.getData();
+        String channel;
+        String type;
 
+        List<String> list = NotificationPreference.getInstance().getSubscribeNotifications();
 
-        sendNotification(title, message);
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+        for (Map.Entry<String, String> entry : data.entrySet()) {
+            if (list.contains(entry.getKey())){
+                channel = entry.getKey();
+                type = entry.getValue();
+                sendNotification(channel, type, title, message);
+                break;
+            }
+        }
+
+        // do nothing if the user doesnt subscribe to this channel of notification.
+
     }
     // [END receive_message]
 
@@ -51,22 +72,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param message GCM message received.
      */
-    private void sendNotification(String title, String message) {
+    private void sendNotification(String channel, String type, String title, String message) {
 
         Intent intent = new Intent(this, MainActivity.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String NOTIFICATION_CHANNEL_ID = "my_channel_id_01";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "FestiApp - Notification System", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel notificationChannel = new NotificationChannel(channel, "FestiApp - Notification System", NotificationManager.IMPORTANCE_HIGH);
 
             // Configure the notification channel.
-            notificationChannel.setDescription("FestiApp - Notification System");
+            notificationChannel.setDescription("FestiApp - " + channel);
             notificationChannel.enableLights(true);
             notificationChannel.setLightColor(Color.RED);
             notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
@@ -75,7 +95,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channel);
 
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -85,9 +105,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setPriority(Notification.PRIORITY_MAX)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setContentInfo(message);
+                .setContentInfo(message)
+                .setChannelId(channel)
+                .setCategory(type);
 
         notificationManager.notify(1, notificationBuilder.build());
     }
-
 }

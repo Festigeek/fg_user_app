@@ -6,9 +6,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 
-
 public class MyFirebaseIDService extends FirebaseInstanceIdService {
-    private static final String TAG = "FIREBASE Service";
+    private static final String TAG = "Notification Service";
 
     @Override
     public void onTokenRefresh() {
@@ -17,6 +16,7 @@ public class MyFirebaseIDService extends FirebaseInstanceIdService {
         Log.e(TAG, "Refreshed token: " + refreshedToken);
 
         // TODO: Implement this method to send any registration to your app's servers.
+
         sendRegistrationToServer(refreshedToken);
     }
 
