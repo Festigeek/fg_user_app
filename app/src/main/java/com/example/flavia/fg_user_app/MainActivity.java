@@ -177,12 +177,6 @@ public class MainActivity extends AppCompatActivity
     // NotificationFragment
     @Override
     public void upadateNotificationRequest(final List<String> listNotifications) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                NotificationPreference.getInstance().setSubscribeNotifications(listNotifications);
-            }
-        });
     }
 
     @Override

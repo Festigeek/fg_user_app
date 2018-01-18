@@ -1,5 +1,7 @@
 package com.example.flavia.fg_user_app;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,11 +10,8 @@ public class NotificationPreference {
     private static final NotificationPreference ourInstance = new NotificationPreference();
 
     public static NotificationPreference getInstance() {
+        Log.e(NotificationPreference.class.getSimpleName(), ourInstance.subscribeNotifications.toString());
         return ourInstance;
-    }
-
-    private NotificationPreference() {
-        this.subscribeNotifications = DEFAULT_PREFERENCES;
     }
 
     static final List<String> DEFAULT_PREFERENCES = Collections.unmodifiableList(
@@ -47,41 +46,53 @@ public class NotificationPreference {
     // Anim
     // Food
     // Ceremony
-    private List<String> subscribeNotifications = new ArrayList<>();
+    private ArrayList<String> subscribeNotifications;
     private boolean atLeastOneGame = true;
 
 
+    private NotificationPreference() {
+        subscribeNotifications = new ArrayList<>();
+        subscribeNotifications.add("HS");
+        subscribeNotifications.add("LOL");
+        subscribeNotifications.add("CSGO");
+        subscribeNotifications.add("OW");
+        subscribeNotifications.add("Anim");
+        subscribeNotifications.add("Food");
+        subscribeNotifications.add("Ceremony");
+
+        atLeastOneGame = true;
+
+    }
 
     public List<String> getSubscribeNotifications() {
         return subscribeNotifications;
     }
 
-    public void setSubscribeNotifications(List<String> subscribeNotifications) {
+    /*public void setSubscribeNotifications(List<String> subscribeNotifications) {
         this.subscribeNotifications = subscribeNotifications;
-    }
+    }*/
 
-    public boolean isAlreadyActif(String tag) {
+    public boolean isActif(String tag) {
         return subscribeNotifications.contains(tag);
     }
 
     public void add(String tag) {
-        if (isAlreadyActif(tag))
-            throw new IllegalArgumentException("Already on the list");
-        subscribeNotifications.add(tag);
+        if (! isActif(tag)) {
+            subscribeNotifications.add(tag);
+            atLeastOneGame = atLeastOneGame || GAMES.contains(tag);
+        }
 
-        atLeastOneGame = atLeastOneGame || GAMES.contains(tag);
     }
 
     public void remove(String tag) {
-        if (!isAlreadyActif(tag))
-            throw new IllegalArgumentException("Not on the list");
-        subscribeNotifications.remove(tag);
+        if (isActif(tag)) {
+            subscribeNotifications.remove(tag);
 
-
-       atLeastOneGame = subscribeNotifications.contains("HS")
-               || subscribeNotifications.contains("LOL")
-               || subscribeNotifications.contains("CSGO")
-               || subscribeNotifications.contains("OW");
+            atLeastOneGame = isActif("HS")
+                    || isActif("LOL")
+                    || isActif("CSGO")
+                    || isActif("OW");
+        }
     }
 
     public boolean haveAtLeastOneGame() {

@@ -115,58 +115,49 @@ public class NotificationFragment extends Fragment {
                 // CSGO
                 // OW
                 if (isChecked) {
-
-                    preferences.add("HS");
                     hsSwitch.setChecked(true);
-
-                    preferences.add("LOL");
                     lolSwitch.setChecked(true);
-
-                    preferences.add("CSGO");
                     csgoSwitch.setChecked(true);
-
-                    preferences.add("OW");
                     owSwitch.setChecked(true);
 
                 } else {
-
-                    preferences.remove("HS");
                     hsSwitch.setChecked(false);
-
-                    preferences.remove("LOL");
                     lolSwitch.setChecked(false);
-
-                    preferences.remove("CSGO");
                     csgoSwitch.setChecked(false);
-
-                    preferences.remove("OW");
                     owSwitch.setChecked(false);
                 }
             }
         });
 
-
         hsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                
 
                 NotificationPreference preferences = NotificationPreference.getInstance();
                 // Check status of :
                 // HS
                 if (isChecked) {
 
+                    if (! preferences.haveAtLeastOneGame()) {
+
+                        allTournamentSwitch.setChecked(true);
+
+                        lolSwitch.setChecked(false);
+                        csgoSwitch.setChecked(false);
+                        owSwitch.setChecked(false);
+                    }
+
                     preferences.add("HS");
-                    allTournamentSwitch.setChecked(true);
+
 
                 } else {
-
-                    preferences.remove("HS");
 
                     if (! preferences.haveAtLeastOneGame()){
                         allTournamentSwitch.setChecked(false);
                     }
 
-
+                    preferences.remove("HS");
                 }
             }
         });
@@ -177,21 +168,148 @@ public class NotificationFragment extends Fragment {
 
                 NotificationPreference preferences = NotificationPreference.getInstance();
                 // Check status of :
-                // LOL
+                // HS
                 if (isChecked) {
 
+                    if (! preferences.haveAtLeastOneGame()) {
+
+                        allTournamentSwitch.setChecked(true);
+
+                        hsSwitch.setChecked(false);
+                        csgoSwitch.setChecked(false);
+                        owSwitch.setChecked(false);
+                    }
+
                     preferences.add("LOL");
-                    allTournamentSwitch.setChecked(true);
+
 
                 } else {
-
-                    preferences.remove("LOL");
 
                     if (! preferences.haveAtLeastOneGame()){
                         allTournamentSwitch.setChecked(false);
                     }
 
+                    preferences.remove("LOL");
+                }
+            }
+        });
 
+        csgoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // HS
+                if (isChecked) {
+
+                    if (! preferences.haveAtLeastOneGame()) {
+
+                        allTournamentSwitch.setChecked(true);
+
+                        hsSwitch.setChecked(false);
+                        lolSwitch.setChecked(false);
+                        owSwitch.setChecked(false);
+                    }
+
+                    preferences.add("CSGO");
+
+
+                } else {
+
+                    if (! preferences.haveAtLeastOneGame()){
+                        allTournamentSwitch.setChecked(false);
+                    }
+
+                    preferences.remove("CSGO");
+                }
+            }
+        });
+
+        owSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // HS
+                if (isChecked) {
+
+                    if (! preferences.haveAtLeastOneGame()) {
+
+                        allTournamentSwitch.setChecked(true);
+
+                        hsSwitch.setChecked(false);
+                        lolSwitch.setChecked(false);
+                        csgoSwitch.setChecked(false);
+                    }
+
+                    preferences.add("OW");
+
+
+                } else {
+
+                    if (! preferences.haveAtLeastOneGame()){
+                        allTournamentSwitch.setChecked(false);
+                    }
+
+                    preferences.remove("OW");
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+
+        animSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // Anim
+                if (isChecked) {
+                    preferences.add("Anim");
+
+                } else {
+                    preferences.remove("Anim");
+                }
+            }
+        });
+
+        foodSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // Food
+                if (isChecked) {
+                    preferences.add("Food");
+
+                } else {
+                    preferences.remove("Food");
+                }
+            }
+        });
+
+        ceremonySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                NotificationPreference preferences = NotificationPreference.getInstance();
+                // Check status of :
+                // Ceremony
+                if (isChecked) {
+                    preferences.add("Ceremony");
+
+                } else {
+                    preferences.remove("Ceremony");
                 }
             }
         });
