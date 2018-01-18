@@ -32,6 +32,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -192,8 +193,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         SharedPreferences sharedPreferences = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("email", email);
-        editor.putString("password", password);
-        editor.commit();
+        if(!(password==null)){
+            editor.putString("password", password);
+        }
+
+        editor.apply();
         //Log.d(sharedPreferences.getString());
 
     }
@@ -283,6 +287,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             //TODO cancel and reauth
+                            Toast toast = Toast.makeText(getApplicationContext(), "Login Failed, please try again", Toast.LENGTH_SHORT);
+                            toast.show();
+                            saveCredentials(email, null);
+                            finish();
+                            startActivity(getIntent());
                             Log.i("error auth", "failed");
 
                     }

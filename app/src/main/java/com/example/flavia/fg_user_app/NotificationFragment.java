@@ -1,6 +1,7 @@
 package com.example.flavia.fg_user_app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +64,10 @@ public class NotificationFragment extends Fragment {
     @BindView(R.id.ceremony)
     protected Switch ceremonySwitch;
 
+    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyData", Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
     public NotificationFragment() {
         // Required empty public constructor
     }
@@ -101,7 +107,7 @@ public class NotificationFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
 
-        // Set all listener
+        // Set all listeners
 
 
         allTournamentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -244,6 +250,7 @@ public class NotificationFragment extends Fragment {
                         csgoSwitch.setChecked(false);
                     }
 
+                    savePreferences("OW", true);
                     preferences.add("OW");
 
 
@@ -252,7 +259,7 @@ public class NotificationFragment extends Fragment {
                     if (! preferences.haveAtLeastOneGame()){
                         allTournamentSwitch.setChecked(false);
                     }
-
+                    savePreferences("OW", false);
                     preferences.remove("OW");
                 }
             }
@@ -316,6 +323,10 @@ public class NotificationFragment extends Fragment {
 
 
 
+        foodSwitch.setChecked(sharedPreferences.getBoolean("food", true));
+
+
+
 
         // Inflate the layout for this fragment
         return view;
@@ -326,6 +337,14 @@ public class NotificationFragment extends Fragment {
         if (mListener != null) {
             mListener.upadateNotificationRequest(listNotifications);
         }
+    }
+
+    public void savePreferences(String buttonId, boolean value){
+
+        editor.putBoolean(buttonId, value);
+        //editor.putStringSet("food", )
+
+        editor.commit();
     }
 
     @Override
