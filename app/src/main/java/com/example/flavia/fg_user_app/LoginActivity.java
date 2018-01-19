@@ -16,7 +16,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +26,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,25 +39,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -87,7 +73,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     //data
     RequestQueue queue = null;
-
 
     // UI references.
     private EditText mEmailView;
@@ -134,19 +119,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void populateAutoComplete() {
-       SharedPreferences sharedPreferences = getSharedPreferences("MyData", Context.MODE_PRIVATE);
-       String savedEmail = sharedPreferences.getString("email", DEFAULT);
-       String savedPassword = sharedPreferences.getString("password", DEFAULT);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        String savedEmail = sharedPreferences.getString("email", DEFAULT);
+        String savedPassword = sharedPreferences.getString("password", DEFAULT);
 
-       if(!(savedEmail.equals(DEFAULT) && savedPassword.equals(DEFAULT))){
-           mEmailView.setText(savedEmail);
-           mPasswordView.setText(savedPassword);
-       }
-
-
+        if (!(savedEmail.equals(DEFAULT) && savedPassword.equals(DEFAULT))) {
+            mEmailView.setText(savedEmail);
+            mPasswordView.setText(savedPassword);
+        }
 
     }
-// TODO remove this, not needed
+
+    // TODO remove this, not needed
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -182,18 +166,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
 
-    private void saveCredentials(String email, String password){
+    private void saveCredentials(String email, String password) {
         SharedPreferences sharedPreferences = getSharedPreferences("MyData", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("email", email);
-        if(!(password==null)){
+        if (!(password == null)) {
             editor.putString("password", password);
         }
 
@@ -201,8 +184,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         //Log.d(sharedPreferences.getString());
 
     }
-    private void attemptLogin() {
 
+    private void attemptLogin() {
 
         // Reset errors.
         mEmailView.setError(null);
@@ -259,23 +242,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             //create intent and send tokento the main activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
-                           // checks if auth ok
+                            // checks if auth ok
 
                             try {
                                 if (!response.getString("success").equals("Authenticated.")) {
                                     Log.i("auth failed", response.toString());
                                 }
-                            } catch (Exception e){
+                            } catch (Exception e) {
                                 Log.i("auth failed", response.toString());
                             }
 
                             //get the token and put in intent
                             String token = null;
-                            try{
+                            try {
                                 token = response.getString("token");
                                 saveCredentials(email, password);
                                 Log.i("TOKEN GETSTRING", token);
-                            } catch (Exception e){
+                            } catch (Exception e) {
                                 Log.i("exception", e.toString());
                             }
 
@@ -294,10 +277,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             startActivity(getIntent());
                             Log.i("error auth", "failed");
 
-                    }
-            }){  // needs headers for the request, override header function of this object (not the general class)
+                        }
+                    }) {  // needs headers for the request, override header function of this object (not the general class)
                 @Override
-                public Map<String, String> getHeaders() throws AuthFailureError{
+                public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap<String, String> headers = new HashMap<>();
                     headers.put("Content-Type", "application/json; charset=utf-8");
                     return headers;
@@ -310,13 +293,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
+
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 6;
     }
 
     /**
@@ -381,16 +363,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
-
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
