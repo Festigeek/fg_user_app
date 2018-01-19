@@ -60,11 +60,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String channel;
         String type;
 
-        Map<String, ?> prefs = PreferenceManager.getDefaultSharedPreferences(this).getAll();
-        for (String key : prefs.keySet()) {
-            Log.e("PREF", key);
-        }
-
         for (Map.Entry<String, String> entry : data.entrySet()) {
             if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(convert.get(entry.getKey()), false)){
                 channel = entry.getKey();
