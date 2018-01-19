@@ -9,6 +9,9 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
+
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +48,11 @@ public class NotificationFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
+
+        Map<String, ?> prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()).getAll();
+        for (String key : prefs.keySet()) {
+            Log.e("PREF", key + ": " + prefs.get(key));
+        }
     }
 
     @Override

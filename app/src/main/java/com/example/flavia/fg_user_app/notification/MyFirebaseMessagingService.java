@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.util.ArrayMap;
 import android.util.Log;
 
@@ -30,20 +31,19 @@ import java.util.Map;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "Notification Service";
 
-    private Map<String, String> channels;
+    private Map<String, String> convert;
 
     public MyFirebaseMessagingService() {
         super();
 
-        channels = new ArrayMap<>();
-        channels.put("HS", "notif_hs");
-        channels.put("LOL", "notif_lol");
-        channels.put("CSGO", "notif_csgo");
-        channels.put("OW", "notif_ow");
-        channels.put("Anim", "notif_anim");
-        channels.put("Food", "notif_meal");
-        channels.put("Ceremony", "notif_price");
-
+        convert = new ArrayMap<>();
+        convert.put("HS", "notif_hs");
+        convert.put("LOL", "notif_lol");
+        convert.put("CSGO", "notif_csgo");
+        convert.put("OW", "notif_ow");
+        convert.put("Anim", "notif_anim");
+        convert.put("Food", "notif_meal");
+        convert.put("Ceremony", "notif_price");
     }
 
     @Override
@@ -60,18 +60,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String channel;
         String type;
 
-//        List<String> list = OldNotificationPreference.getInstance().getSubscribeNotifications();
-//
-//        for (Map.Entry<String, String> entry : data.entrySet()) {
-//            if (list.contains(entry.getKey())){
-//                channel = entry.getKey();
-//                type = entry.getValue();
-//                sendNotification(channel, type, title, message);
-//                break;
-//            }
-//        }
+        Map<String, ?> prefs = PreferenceManager.getDefaultSharedPreferences(this).getAll();
+        for (String key : prefs.keySet()) {
+            Log.e("PREF", key);
+        }
 
-
+        for (Map.Entry<String, String> entry : data.entrySet()) {
+            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(convert.get(entry.getKey()), false)){
+                channel = entry.getKey();
+                type = entry.getValue();
+                sendNotification(channel, type, title, message);
+                break;
+            }
+        }
 
         // do nothing if the user doesnt subscribe to this channel of notification.
 
