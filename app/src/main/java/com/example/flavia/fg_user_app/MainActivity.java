@@ -1,6 +1,8 @@
 package com.example.flavia.fg_user_app;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,9 +21,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener,
@@ -31,8 +45,12 @@ public class MainActivity extends AppCompatActivity
     private final String FRAG_TAG = "swap fragment";
 
 
+    private final String url = "https://api.festigeek.ch/v1";
+
+
 
     private String token = null;
+    RequestQueue queue = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +143,41 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onRestart() {
         super.onRestart();
-        //TODO check if the token is valid and redirect to login if not
-        //eg: simple reuquest on /user/userid and see which response we get
+        //check if the token is valid and redirect to login if not
+
+
+        Map<String, String> jsonParams = new HashMap<>();
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url + "/users/me", new JSONObject(jsonParams),
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("/me RESPONSE", response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("token invalid", error.toString());
+                        Toast toast = Toast.makeText(getApplicationContext(), "Session expired, please reconnect", Toast.LENGTH_SHORT);
+                        toast.show();
+                        startActivity(getIntent());
+                    }
+                }) {  // needs headers for the request, override header function of this object (not the general class)
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+
+        queue.add(jsObjRequest);
+
     }
     /**
      * Change the current displayed fragment by a new one.
@@ -142,8 +193,11 @@ public class MainActivity extends AppCompatActivity
 
         try {
             frag = (Fragment) fragmentClass.newInstance();
+            Log.e("instance ok", null);
         } catch (Exception e) {
+            Log.e("instance not ok ", e.toString());
             e.printStackTrace();
+
         }
 
         String backStateName = ((Object) frag).getClass().getName();
