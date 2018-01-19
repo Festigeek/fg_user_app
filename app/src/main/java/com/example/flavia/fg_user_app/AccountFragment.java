@@ -228,7 +228,7 @@ public class AccountFragment extends Fragment {
     }
 
     public boolean checkIfNull(String string){
-        return (!string.equals(null));
+        return (!string.equals("null"));
     }
 
     @Override
