@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity
         NotificationFragment.OnFragmentInteractionListener {
 
     private final String FRAG_TAG = "swap fragment";
-
     private final String url = "https://api.festigeek.ch/v1";
 
     private String token = null;

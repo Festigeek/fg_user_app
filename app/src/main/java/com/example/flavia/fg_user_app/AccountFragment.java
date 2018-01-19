@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Base64;
@@ -132,6 +133,9 @@ public class AccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        ActionBar toolbar = ((MainActivity)getActivity()).getSupportActionBar();
+        toolbar.setTitle(R.string.account_title);
 
         queue = Volley.newRequestQueue(getContext());
         attemptGetUserInfo();

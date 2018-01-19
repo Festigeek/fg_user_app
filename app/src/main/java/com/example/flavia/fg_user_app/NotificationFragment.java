@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 
@@ -27,6 +28,9 @@ public class NotificationFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
+
+        ActionBar toolbar = ((MainActivity)getActivity()).getSupportActionBar();
+        toolbar.setTitle(R.string.notif_title);
     }
 
     @Override
