@@ -4,40 +4,50 @@
     android:layout_height="match_parent">
 
     <PreferenceCategory
-        android:title="@string/header_tournament"
-        android:summary="@string/sum_tournament">
+        android:key="notif_games"
+        android:title="@string/header_tournament">
 
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="@string/pref_lol" />
+        <SwitchPreferenceCompat
+            android:key="notif_lol"
+            android:title="@string/pref_lol"
+            android:summary="@string/sum_tournament"/>
 
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="@string/pref_csgo" />
+        <SwitchPreferenceCompat
+            android:key="notif_csgo"
+            android:title="@string/pref_csgo"
+            android:summary="@string/sum_tournament"/>
 
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="@string/pref_ow" />
+        <SwitchPreferenceCompat
+            android:key="notif_ow"
+            android:title="@string/pref_ow"
+            android:summary="@string/sum_tournament"/>
 
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="@string/pref_hs" />
+        <SwitchPreferenceCompat
+            android:key="notif_hs"
+            android:title="@string/pref_hs"
+            android:summary="@string/sum_tournament"/>
 
     </PreferenceCategory>
 
-    <CheckBoxPreference
-        android:key="checkbox_preference"
-        android:title="@string/pref_anim"
-        android:summary="@string/pref_sum_anim" />
+    <PreferenceCategory
+        android:key="notif_miscellaneous"
+        android:title="@string/header_miscellaneous">
 
-    <CheckBoxPreference
-        android:key="checkbox_preference"
-        android:title="@string/pref_meal"
-        android:summary="@string/pref_sum_meal" />
+        <SwitchPreferenceCompat
+            android:key="notif_anim"
+            android:title="@string/pref_anim"
+            android:summary="@string/pref_sum_anim" />
 
-    <CheckBoxPreference
-        android:key="checkbox_preference"
-        android:title="@string/pref_prices"
-        android:summary="@string/pref_sum_prices" />
+        <SwitchPreferenceCompat
+            android:key="notif_meal"
+            android:title="@string/pref_meal"
+            android:summary="@string/pref_sum_meal" />
+
+        <SwitchPreferenceCompat
+            android:key="notif_prices"
+            android:title="@string/pref_prices"
+            android:summary="@string/pref_sum_prices" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

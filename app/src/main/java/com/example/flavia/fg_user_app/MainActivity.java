@@ -33,7 +33,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener,
                     AccountFragment.OnFragmentInteractionListener,
-                    OldNotificationFragment.OnNotificationsPreferencesSet{
+                    NotificationFragment.OnFragmentInteractionListener{
 
     private final String FRAG_TAG = "swap fragment";
 
@@ -68,9 +68,6 @@ public class MainActivity extends AppCompatActivity
 
         //fragment launch
         changeFragment(AccountFragment.class, false, true);
-
-        // Just load default pref one
-        OldNotificationPreference.getInstance();
     }
 
     @Override
@@ -114,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_account) {
             changeFragment(AccountFragment.class, false, true);
         } else if (id == R.id.nav_notifications) {
-            changeFragment(OldNotificationFragment.class, false, true);
+            changeFragment(NotificationFragment.class, false, true);
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -221,11 +218,6 @@ public class MainActivity extends AppCompatActivity
     }
     public String getToken() {
         return token;
-    }
-
-    // OldNotificationFragment
-    @Override
-    public void upadateNotificationRequest(final List<String> listNotifications) {
     }
 
     @Override
