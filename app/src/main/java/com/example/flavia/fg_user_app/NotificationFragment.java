@@ -105,8 +105,8 @@ public class NotificationFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         unbinder = ButterKnife.bind(this, view);
-        sharedPreferences = getActivity().getSharedPreferences("MyData", Context.MODE_PRIVATE);
 
+        sharedPreferences = getActivity().getSharedPreferences("MyData", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
         // Set all listeners

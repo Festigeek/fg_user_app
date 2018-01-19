@@ -122,12 +122,9 @@ public class MainActivity extends AppCompatActivity
             changeFragment(AccountFragment.class, false, true);
         } else if (id == R.id.nav_notifications) {
             changeFragment(NotificationFragment.class, false, true);
-
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(this, LoginActivity.class);
-
             startActivity(intent);
-
         }
 
 
