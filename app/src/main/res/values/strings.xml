@@ -21,10 +21,15 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="mail">Adresse mail</string>
-    <string name="name">Nom</string>
+    <string name="greeting">Bonjour!</string>
     <string name="surname">Prénom</string>
     <string name="username">Nom d\'utilisateur</string>
     <string name="birthdate">Date de naissance</string>
+    <string name="steam">Compte Steam</string>
+    <string name="battleTag">BattleTag</string>
+    <string name="lol">Compte LoL</string>
+    <string name="qrInstructions">Présente ce code à l\'entrée et pour consommer tes achats cuisine </string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Notifications</string>

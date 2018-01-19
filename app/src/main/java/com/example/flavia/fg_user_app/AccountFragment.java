@@ -25,7 +25,12 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -54,8 +59,8 @@ public class AccountFragment extends Fragment {
 
     private Unbinder unbinder;
     private OnFragmentInteractionListener mListener;
-    @BindView(R.id.fullname)
-    protected AppCompatTextView fullname_field;
+    @BindView(R.id.greeting)
+    protected AppCompatTextView greeting_field;
     @BindView(R.id.mail)
     protected AppCompatTextView mail_field;
     @BindView(R.id.qrcode)
@@ -163,9 +168,25 @@ public class AccountFragment extends Fragment {
 */
     private void populateFields(JSONObject data){
         try{
-            fullname_field.setText(data.getString("firstname") + " "+ data.getString("lastname"));
+            // set greeting depending of time of day
+            Calendar instance = Calendar.getInstance();
+            int hour = instance.get(Calendar.HOUR_OF_DAY);
+
+            String greetingsText;
+            if(hour>17 || hour < 3){
+                greetingsText = "Bonsoir ";
+            } else {
+                greetingsText = "Bonjour ";
+            }
+            greeting_field.setText(greetingsText + data.getString("firstname") + " !");
             mail_field.setText(data.getString("email"));
             username_field.setText(data.getString("username"));
+           /* SimpleDateFormat birthdayDate = new SimpleDateFormat(data.getString("birthdate"));
+            String timeStamp = new SimpleDateFormat("dd MMM yyyy",
+                    Locale.FRANCE).format(new Date(data.getString("birthdate")));
+            Log.d("date anniversaire", timeStamp.toString());
+            String birthdayFormatted = timeStamp.toString();*/
+
             birthdate_field.setText(data.getString("birthdate"));
             String encodedImage = data.getString("QRCode");
             byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);

@@ -3,7 +3,9 @@ package com.example.flavia.fg_user_app;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -30,6 +32,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -70,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
+    private static final String DEFAULT = "NA";
+
     private final String url = "https://api.festigeek.ch/v1";
 
     /**
@@ -85,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -101,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -117,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 attemptLogin();
             }
@@ -125,14 +129,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        populateAutoComplete();
+
     }
 
     private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
+       SharedPreferences sharedPreferences = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+       String savedEmail = sharedPreferences.getString("email", DEFAULT);
+       String savedPassword = sharedPreferences.getString("password", DEFAULT);
 
-        getLoaderManager().initLoader(0, null, this);
+       if(!(savedEmail.equals(DEFAULT) && savedPassword.equals(DEFAULT))){
+           mEmailView.setText(savedEmail);
+           mPasswordView.setText(savedPassword);
+       }
+
+
+
     }
 // TODO remove this, not needed
     private boolean mayRequestContacts() {
@@ -176,6 +188,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+
+    private void saveCredentials(String email, String password){
+        SharedPreferences sharedPreferences = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("email", email);
+        if(!(password==null)){
+            editor.putString("password", password);
+        }
+
+        editor.apply();
+        //Log.d(sharedPreferences.getString());
+
+    }
     private void attemptLogin() {
 
 
@@ -184,8 +209,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -230,12 +255,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.i("REST", response.toString());
-                            //TODO go to mainactivity
+
                             //create intent and send tokento the main activity
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 
-
-                            //test if auth ok
+                           // checks if auth ok
 
                             try {
                                 if (!response.getString("success").equals("Authenticated.")) {
@@ -248,8 +272,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             //get the token and put in intent
                             String token = null;
                             try{
-                                  token = response.getString("token");
-                                  Log.i("TOKEN GETSTRING", token);
+                                token = response.getString("token");
+                                saveCredentials(email, password);
+                                Log.i("TOKEN GETSTRING", token);
                             } catch (Exception e){
                                 Log.i("exception", e.toString());
                             }
@@ -261,6 +286,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            //TODO cancel and reauth
+                            Toast toast = Toast.makeText(getApplicationContext(), "Login Failed, please try again", Toast.LENGTH_SHORT);
+                            toast.show();
+                            saveCredentials(email, null);
+                            finish();
+                            startActivity(getIntent());
+                            Log.i("error auth", "failed");
 
                     }
             }){  // needs headers for the request, override header function of this object (not the general class)
@@ -349,7 +381,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+
     }
 
     @Override
@@ -357,14 +389,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
-    }
 
 
     private interface ProfileQuery {
