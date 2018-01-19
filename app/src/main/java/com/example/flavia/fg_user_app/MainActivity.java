@@ -27,20 +27,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
-        implements  NavigationView.OnNavigationItemSelectedListener,
-                    AccountFragment.OnFragmentInteractionListener,
-                    NotificationFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        AccountFragment.OnFragmentInteractionListener,
+        NotificationFragment.OnFragmentInteractionListener {
 
     private final String FRAG_TAG = "swap fragment";
 
-
     private final String url = "https://api.festigeek.ch/v1";
-
-
 
     private String token = null;
     RequestQueue queue = null;
@@ -51,11 +47,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         // bundle recieved, get the token
         Intent i = getIntent();
-        token =  i.getStringExtra("token");
+        token = i.getStringExtra("token");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -117,19 +112,15 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         }
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-
-
     @Override
     protected void onRestart() {
         super.onRestart();
         //check if the token is valid and redirect to login if not
-
 
         Map<String, String> jsonParams = new HashMap<>();
 
@@ -160,10 +151,10 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-
         queue.add(jsObjRequest);
 
     }
+
     /**
      * Change the current displayed fragment by a new one.
      * - if the fragment is in backstack, it will pop it
@@ -216,6 +207,7 @@ public class MainActivity extends AppCompatActivity
             Log.w(FRAG_TAG, "Unable to commit fragment, could be activity as been killed in background. " + exception.toString());
         }
     }
+
     public String getToken() {
         return token;
     }
