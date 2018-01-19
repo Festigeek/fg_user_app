@@ -188,9 +188,8 @@ public class MainActivity extends AppCompatActivity
 
         try {
             frag = (Fragment) fragmentClass.newInstance();
-            Log.e("instance ok", null);
+
         } catch (Exception e) {
-            Log.e("instance not ok ", e.toString());
             e.printStackTrace();
 
         }

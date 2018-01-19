@@ -69,6 +69,12 @@ public class AccountFragment extends Fragment {
     protected AppCompatTextView username_field;
     @BindView(R.id.birthdate)
     protected AppCompatTextView birthdate_field;
+    @BindView(R.id.steam_id)
+    protected AppCompatTextView steamid_field;
+    @BindView(R.id.battle_tag)
+    protected AppCompatTextView battle_tag_field;
+    @BindView(R.id.lolTag)
+    protected AppCompatTextView lol_tag_field;
     //data
     RequestQueue queue = null;
 
@@ -192,6 +198,18 @@ public class AccountFragment extends Fragment {
             byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             qrcode_field.setImageBitmap(decodedByte);
+            if(checkIfNull(data.getString("steamID64"))){
+                steamid_field.setText(data.getString("steamID64"));
+            }
+            if(checkIfNull(data.getString("battleTag"))){
+                battle_tag_field.setText(data.getString("battleTag"));
+            }
+            if(checkIfNull(data.getString("lol_account"))){
+                lol_tag_field.setText(data.getString("lol_account"));
+            }
+
+
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -207,6 +225,10 @@ public class AccountFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    public boolean checkIfNull(String string){
+        return (!string.equals(null));
     }
 
     @Override
