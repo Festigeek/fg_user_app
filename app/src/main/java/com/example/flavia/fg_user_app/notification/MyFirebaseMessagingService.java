@@ -61,7 +61,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String type;
 
         for (Map.Entry<String, String> entry : data.entrySet()) {
-            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(convert.get(entry.getKey()), false)){
+            if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean(convert.get(entry.getKey()), true)){
                 channel = entry.getKey();
                 type = entry.getValue();
                 sendNotification(channel, type, title, message);

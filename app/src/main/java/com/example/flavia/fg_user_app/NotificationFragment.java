@@ -27,8 +27,6 @@ public class NotificationFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
-
-  
     }
 
     @Override
