@@ -132,7 +132,7 @@ public class NotificationFragment extends Fragment {
         hsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                
+
 
                 NotificationPreference preferences = NotificationPreference.getInstance();
                 // Check status of :
