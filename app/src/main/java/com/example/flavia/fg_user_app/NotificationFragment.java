@@ -64,8 +64,8 @@ public class NotificationFragment extends Fragment {
     @BindView(R.id.ceremony)
     protected Switch ceremonySwitch;
 
-    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyData", Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor = sharedPreferences.edit();
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
 
     public NotificationFragment() {
@@ -105,7 +105,9 @@ public class NotificationFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         unbinder = ButterKnife.bind(this, view);
+        sharedPreferences = getActivity().getSharedPreferences("MyData", Context.MODE_PRIVATE);
 
+        editor = sharedPreferences.edit();
 
         // Set all listeners
 
