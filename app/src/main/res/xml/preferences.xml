@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:key="notif_games"
+        android:title="@string/header_tournament">
+
+        <SwitchPreferenceCompat
+            android:key="notif_lol"
+            android:title="@string/pref_lol"
+            android:summary="@string/sum_tournament"/>
+
+        <SwitchPreferenceCompat
+            android:key="notif_csgo"
+            android:title="@string/pref_csgo"
+            android:summary="@string/sum_tournament"/>
+
+        <SwitchPreferenceCompat
+            android:key="notif_ow"
+            android:title="@string/pref_ow"
+            android:summary="@string/sum_tournament"/>
+
+        <SwitchPreferenceCompat
+            android:key="notif_hs"
+            android:title="@string/pref_hs"
+            android:summary="@string/sum_tournament"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="notif_miscellaneous"
+        android:title="@string/header_miscellaneous">
+
+        <SwitchPreferenceCompat
+            android:key="notif_anim"
+            android:title="@string/pref_anim"
+            android:summary="@string/pref_sum_anim" />
+
+        <SwitchPreferenceCompat
+            android:key="notif_meal"
+            android:title="@string/pref_meal"
+            android:summary="@string/pref_sum_meal" />
+
+        <SwitchPreferenceCompat
+            android:key="notif_prices"
+            android:title="@string/pref_prices"
+            android:summary="@string/pref_sum_prices" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

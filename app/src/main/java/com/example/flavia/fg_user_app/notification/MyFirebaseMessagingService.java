@@ -7,14 +7,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import com.example.flavia.fg_user_app.MainActivity;
-import com.example.flavia.fg_user_app.NotificationFragment;
-import com.example.flavia.fg_user_app.NotificationPreference;
 import com.example.flavia.fg_user_app.R;
 
 
@@ -25,7 +23,6 @@ import com.example.flavia.fg_user_app.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +30,20 @@ import java.util.Map;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "Notification Service";
 
+    private Map<String, String> channels;
+
     public MyFirebaseMessagingService() {
         super();
+
+        channels = new ArrayMap<>();
+        channels.put("HS", "notif_hs");
+        channels.put("LOL", "notif_lol");
+        channels.put("CSGO", "notif_csgo");
+        channels.put("OW", "notif_ow");
+        channels.put("Anim", "notif_anim");
+        channels.put("Food", "notif_meal");
+        channels.put("Ceremony", "notif_price");
+
     }
 
     @Override
@@ -51,16 +60,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String channel;
         String type;
 
-        List<String> list = NotificationPreference.getInstance().getSubscribeNotifications();
+//        List<String> list = OldNotificationPreference.getInstance().getSubscribeNotifications();
+//
+//        for (Map.Entry<String, String> entry : data.entrySet()) {
+//            if (list.contains(entry.getKey())){
+//                channel = entry.getKey();
+//                type = entry.getValue();
+//                sendNotification(channel, type, title, message);
+//                break;
+//            }
+//        }
 
-        for (Map.Entry<String, String> entry : data.entrySet()) {
-            if (list.contains(entry.getKey())){
-                channel = entry.getKey();
-                type = entry.getValue();
-                sendNotification(channel, type, title, message);
-                break;
-            }
-        }
+
 
         // do nothing if the user doesnt subscribe to this channel of notification.
 
