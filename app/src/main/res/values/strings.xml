@@ -35,4 +35,16 @@
     <string name="hello_blank_fragment">Notifications</string>
 
     <string name="default_notification_channel_id">default</string>
+    <string name="header_tournament">Tournois</string>
+    <string name="pref_lol">League of Legends</string>
+    <string name="pref_csgo">CS: GO</string>
+    <string name="pref_ow">Overwatch</string>
+    <string name="pref_hs">Hearthstone</string>
+    <string name="pref_anim">Animations</string>
+    <string name="pref_meal">Repas</string>
+    <string name="pref_prices">Remises des Prix</string>
+    <string name="sum_tournament">Être notifié lorsqu\'une partie commence</string>
+    <string name="pref_sum_anim">Être notifié lors du début d\'une animations</string>
+    <string name="pref_sum_meal">Être notifié lorsque la cuisine est ouverte</string>
+    <string name="pref_sum_prices">Être notifié pour les cérémonies des remises de prix</string>
 </resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <PreferenceCategory
+        android:title="@string/header_tournament"
+        android:summary="@string/sum_tournament">
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="@string/pref_lol" />
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="@string/pref_csgo" />
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="@string/pref_ow" />
+
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:title="@string/pref_hs" />
+
+    </PreferenceCategory>
+
+    <CheckBoxPreference
+        android:key="checkbox_preference"
+        android:title="@string/pref_anim"
+        android:summary="@string/pref_sum_anim" />
+
+    <CheckBoxPreference
+        android:key="checkbox_preference"
+        android:title="@string/pref_meal"
+        android:summary="@string/pref_sum_meal" />
+
+    <CheckBoxPreference
+        android:key="checkbox_preference"
+        android:title="@string/pref_prices"
+        android:summary="@string/pref_sum_prices" />
+
+</PreferenceScreen>

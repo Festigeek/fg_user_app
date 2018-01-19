@@ -1,18 +1,12 @@
 package com.example.flavia.fg_user_app;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,7 +26,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +33,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity
         implements  NavigationView.OnNavigationItemSelectedListener,
                     AccountFragment.OnFragmentInteractionListener,
-                    NotificationFragment.OnNotificationsPreferencesSet{
+                    OldNotificationFragment.OnNotificationsPreferencesSet{
 
     private final String FRAG_TAG = "swap fragment";
 
@@ -77,7 +70,7 @@ public class MainActivity extends AppCompatActivity
         changeFragment(AccountFragment.class, false, true);
 
         // Just load default pref one
-        NotificationPreference.getInstance();
+        OldNotificationPreference.getInstance();
     }
 
     @Override
@@ -121,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_account) {
             changeFragment(AccountFragment.class, false, true);
         } else if (id == R.id.nav_notifications) {
-            changeFragment(NotificationFragment.class, false, true);
+            changeFragment(OldNotificationFragment.class, false, true);
         } else if (id == R.id.nav_logout) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -230,7 +223,7 @@ public class MainActivity extends AppCompatActivity
         return token;
     }
 
-    // NotificationFragment
+    // OldNotificationFragment
     @Override
     public void upadateNotificationRequest(final List<String> listNotifications) {
     }

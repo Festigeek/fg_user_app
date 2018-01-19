@@ -1,32 +1,20 @@
 package com.example.flavia.fg_user_app;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-
-import java.util.List;
-import java.util.Set;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import android.support.v7.preference.PreferenceFragmentCompat;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link NotificationFragment.OnNotificationsPreferencesSet} interface
+ * {@link NotificationFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link NotificationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NotificationFragment extends Fragment {
-
+public class NotificationFragment extends PreferenceFragmentCompat {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,37 +24,7 @@ public class NotificationFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Unbinder unbinder;
-
-    private OnNotificationsPreferencesSet mListener;
-
-    @BindView(R.id.all_tournaments)
-    protected Switch allTournamentSwitch;
-
-    @BindView(R.id.hearthstone_switch)
-    protected Switch hsSwitch;
-
-    @BindView(R.id.lol_switch)
-    protected Switch lolSwitch;
-
-    @BindView(R.id.csgo_switch)
-    protected Switch csgoSwitch;
-
-    @BindView(R.id.ow_switch)
-    protected Switch owSwitch;
-
-    @BindView(R.id.animation)
-    protected Switch animSwitch;
-
-    @BindView(R.id.food)
-    protected Switch foodSwitch;
-
-    @BindView(R.id.ceremony)
-    protected Switch ceremonySwitch;
-
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-
+    private OnFragmentInteractionListener mListener;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -91,6 +49,12 @@ public class NotificationFragment extends Fragment {
     }
 
     @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.preferences);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -99,261 +63,25 @@ public class NotificationFragment extends Fragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        unbinder = ButterKnife.bind(this, view);
-
-        sharedPreferences = getActivity().getSharedPreferences("MyData", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-
-        // Set all listeners
-
-
-        allTournamentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // HS
-                // LOL
-                // CSGO
-                // OW
-                if (isChecked) {
-                    hsSwitch.setChecked(true);
-                    lolSwitch.setChecked(true);
-                    csgoSwitch.setChecked(true);
-                    owSwitch.setChecked(true);
-
-                } else {
-                    hsSwitch.setChecked(false);
-                    lolSwitch.setChecked(false);
-                    csgoSwitch.setChecked(false);
-                    owSwitch.setChecked(false);
-                }
-            }
-        });
-
-        hsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // HS
-                if (isChecked) {
-
-                    if (! preferences.haveAtLeastOneGame()) {
-
-                        allTournamentSwitch.setChecked(true);
-
-                        lolSwitch.setChecked(false);
-                        csgoSwitch.setChecked(false);
-                        owSwitch.setChecked(false);
-                    }
-
-                    preferences.add("HS");
-
-
-                } else {
-
-                    if (! preferences.haveAtLeastOneGame()){
-                        allTournamentSwitch.setChecked(false);
-                    }
-
-                    preferences.remove("HS");
-                }
-            }
-        });
-
-        lolSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // HS
-                if (isChecked) {
-
-                    if (! preferences.haveAtLeastOneGame()) {
-
-                        allTournamentSwitch.setChecked(true);
-
-                        hsSwitch.setChecked(false);
-                        csgoSwitch.setChecked(false);
-                        owSwitch.setChecked(false);
-                    }
-
-                    preferences.add("LOL");
-
-
-                } else {
-
-                    if (! preferences.haveAtLeastOneGame()){
-                        allTournamentSwitch.setChecked(false);
-                    }
-
-                    preferences.remove("LOL");
-                }
-            }
-        });
-
-        csgoSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // HS
-                if (isChecked) {
-
-                    if (! preferences.haveAtLeastOneGame()) {
-
-                        allTournamentSwitch.setChecked(true);
-
-                        hsSwitch.setChecked(false);
-                        lolSwitch.setChecked(false);
-                        owSwitch.setChecked(false);
-                    }
-
-                    preferences.add("CSGO");
-
-
-                } else {
-
-                    if (! preferences.haveAtLeastOneGame()){
-                        allTournamentSwitch.setChecked(false);
-                    }
-
-                    preferences.remove("CSGO");
-                }
-            }
-        });
-
-        owSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // HS
-                if (isChecked) {
-
-                    if (! preferences.haveAtLeastOneGame()) {
-
-                        allTournamentSwitch.setChecked(true);
-
-                        hsSwitch.setChecked(false);
-                        lolSwitch.setChecked(false);
-                        csgoSwitch.setChecked(false);
-                    }
-
-                    savePreferences("OW", true);
-                    preferences.add("OW");
-
-
-                } else {
-
-                    if (! preferences.haveAtLeastOneGame()){
-                        allTournamentSwitch.setChecked(false);
-                    }
-                    savePreferences("OW", false);
-                    preferences.remove("OW");
-                }
-            }
-        });
-
-
-
-
-
-
-
-
-
-        animSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // Anim
-                if (isChecked) {
-                    preferences.add("Anim");
-
-                } else {
-                    preferences.remove("Anim");
-                }
-            }
-        });
-
-        foodSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // Food
-                if (isChecked) {
-                    preferences.add("Food");
-
-                } else {
-                    preferences.remove("Food");
-                }
-            }
-        });
-
-        ceremonySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                NotificationPreference preferences = NotificationPreference.getInstance();
-                // Check status of :
-                // Ceremony
-                if (isChecked) {
-                    preferences.add("Ceremony");
-
-                } else {
-                    preferences.remove("Ceremony");
-                }
-            }
-        });
-
-
-
-        foodSwitch.setChecked(sharedPreferences.getBoolean("food", true));
-
-
-
-
-        // Inflate the layout for this fragment
-        return view;
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//        return inflater.inflate(R.layout.fragment_settings, container, false);
+//    }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(List<String> listNotifications) {
+    public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.upadateNotificationRequest(listNotifications);
+            mListener.onFragmentInteraction(uri);
         }
-    }
-
-    public void savePreferences(String buttonId, boolean value){
-
-        editor.putBoolean(buttonId, value);
-        //editor.putStringSet("food", )
-
-        editor.commit();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnNotificationsPreferencesSet) {
-            mListener = (OnNotificationsPreferencesSet) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -366,21 +94,18 @@ public class NotificationFragment extends Fragment {
         mListener = null;
     }
 
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    // Notification List should contain only :
-    // HS
-    // LOL
-    // CSGO
-    // OW
-    // Anim
-    // Food
-    // Ceremony
-    public interface OnNotificationsPreferencesSet {
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void upadateNotificationRequest(List<String> listNotifications);
+        void onFragmentInteraction(Uri uri);
     }
 }

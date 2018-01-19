@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NotificationPreference {
-    private static final NotificationPreference ourInstance = new NotificationPreference();
+public class OldNotificationPreference {
+    private static final OldNotificationPreference ourInstance = new OldNotificationPreference();
 
-    public static NotificationPreference getInstance() {
-        Log.e(NotificationPreference.class.getSimpleName(), ourInstance.subscribeNotifications.toString());
+    public static OldNotificationPreference getInstance() {
+        Log.e(OldNotificationPreference.class.getSimpleName(), ourInstance.subscribeNotifications.toString());
         return ourInstance;
     }
 
@@ -50,7 +50,7 @@ public class NotificationPreference {
     private boolean atLeastOneGame = true;
 
 
-    private NotificationPreference() {
+    private OldNotificationPreference() {
         subscribeNotifications = new ArrayList<>();
         subscribeNotifications.add("HS");
         subscribeNotifications.add("LOL");
